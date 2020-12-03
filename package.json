@@ -1,0 +1,24 @@
+{
+  "name": "arcblroth-bootstrap",
+  "version": "1.0.0",
+  "description": "Tiny script to load dependencies",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arc-blroth/web-arcblroth-bootstrap.git"
+  },
+  "author": "Arc'blroth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Arc-blroth/web-arcblroth-bootstrap/issues"
+  },
+  "homepage": "https://github.com/Arc-blroth/web-arcblroth-bootstrap#readme",
+  "dependencies": {
+    "@node-minify/clean-css": "^6.1.0",
+    "@node-minify/core": "^6.1.0",
+    "@node-minify/terser": "^6.1.0"
+  }
+}

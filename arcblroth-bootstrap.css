@@ -1,0 +1,66 @@
+html, body {
+	height: 100%;
+    overflow: hidden;
+}
+
+body {
+	color: black;
+    background-color: black;
+	display: block;
+}
+
+.ui {
+    position: absolute;
+    z-index: 1000;
+}
+
+.debug-text {
+	font-family: 'Source Code Pro', 'Consolas', monospace;
+    background-color: #cccccc99;
+}
+
+.loadScreenBg {
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    opacity: 100%;
+    transition: opacity 1000ms;
+}
+
+.logo {
+    width: 50%;
+    height: 30%;
+    left: 50%;
+    top: 33%;
+    transform: translate(-50%, -50%);
+    background-color: #0000;
+    object-fit: contain;
+    image-rendering: pixelated;
+    transition: opacity 1000ms;
+}
+
+.progressBar {
+    width: 70%;
+    height: min(25px, 5%);
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%, -50%);
+    background-color: #232425;
+    border-radius: 1px;
+    opacity: 100%;
+    transition: opacity 1000ms;
+}
+
+.progressBar > div {
+    position: relative;
+    display: block;
+    transition: width 500ms;
+    height: 100%;
+    background-color: #17c1ff;
+}
+
+.loadFail {
+    z-index: 1001 !important;
+    color: white !important;
+    background-color: #ff4a4a99 !important;
+}
