@@ -143,8 +143,8 @@ export function load(args) {
             loaders = args.loaders
             delete args.loaders
         }
-        if(!args.loaders["scripts"]) args.loaders["scripts"] = loadScript
-        if(!args.loaders["stylesheets"]) args.loaders["stylesheets"] = loadStylesheet
+        if(!loaders["scripts"]) args.loaders["scripts"] = loadScript
+        if(!loaders["stylesheets"]) args.loaders["stylesheets"] = loadStylesheet
         
         let types = Object.keys(args)
         let typesLoaded = 0
