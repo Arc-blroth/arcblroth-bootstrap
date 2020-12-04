@@ -130,7 +130,7 @@ export function load(args) {
             progressBar.bar.ontransitionend = () => {
                 alert(errorMsg)
             }
-            let posTxt = screenEle.getElementById("pos")
+            let posTxt = document.getElementById("pos")
             posTxt.innerHTML = errorMsg
             posTxt.classList.add("loadFail")
         }
