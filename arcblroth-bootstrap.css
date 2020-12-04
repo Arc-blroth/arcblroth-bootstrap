@@ -3,20 +3,18 @@ html, body {
     overflow: hidden;
 }
 
-body {
-	color: black;
-    background-color: black;
-	display: block;
+.loadScreen {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    transition: opacity 1000ms;
 }
 
 .ui {
     position: absolute;
     z-index: 1000;
-}
-
-.debug-text {
-	font-family: 'Source Code Pro', 'Consolas', monospace;
-    background-color: #cccccc99;
 }
 
 .loadScreenBg {

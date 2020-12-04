@@ -29,10 +29,10 @@ export function load(args) {
     }
     
     class ProgressBar {
-        constructor() {
+        constructor(parent) {
             this.track = buildDiv(["ui", "progressBar"])
             this.bar = buildDiv()
-            document.body.append(this.track)
+            parent.append(this.track)
             this.track.append(this.bar)
             this.progress = 0
         }
@@ -103,20 +103,22 @@ export function load(args) {
     }
     
     (async function() {
+        let screenEle = buildElement("div", ["loadScreen"])
+        document.body.append(screenEle)
         let styleEle = buildElement("style")
-        document.body.append(styleEle)
+        screenEle.append(styleEle)
         styleEle.innerText = "!!!STYLE!!!"
         
         let loadScreenBg = buildDiv(["ui", "loadScreenBg"])
-        document.body.append(loadScreenBg)
+        screenEle.append(loadScreenBg)
         
         // Decode 
         let logo = buildElement("img", ["ui", "logo"])
         logo.src = "data:image/png;base64,!!!LOGO!!!"
-        document.body.append(logo)
+        screenEle.append(logo)
         
         // 20% stylesheets | 30% scripts | 50% assets
-        let progressBar = new ProgressBar()
+        let progressBar = new ProgressBar(screenEle)
         progressBar.setProgress(0)
         
         function onError(res, error) {
@@ -128,15 +130,20 @@ export function load(args) {
             progressBar.bar.ontransitionend = () => {
                 alert(errorMsg)
             }
-            let posTxt = document.getElementById("pos")
+            let posTxt = screenEle.getElementById("pos")
             posTxt.innerHTML = errorMsg
             posTxt.classList.add("loadFail")
         }
         
+        let onpreload = () => {}
         let onload = () => {}
         if(args.onload) {
             onload = args.onload
             delete args.onload
+        }
+        if(args.onpreload) {
+            onpreload = args.onpreload
+            delete args.onpreload
         }
         let loaders = []
         if(args.loaders) {
@@ -147,33 +154,35 @@ export function load(args) {
         if(!loaders["stylesheets"]) loaders["stylesheets"] = loadStylesheet
         
         let types = Object.keys(args)
-        let typesLoaded = 0
+        let totalResources = types.map(t => args[t] instanceof Array ? args[t].length : 0).reduce((a, b) => a + b)
+        let totalResourcesLoaded = 0
         
         for(let i = 0; i < types.length; i++) {
             let type = types[i]
+            let loader = loaders[type]
             try {
-                let resourcesLoaded = 0
-                await Promise.all(requiredStylesheets.map(s => loadStylesheet(s).then(p => {
-                    progressBar.setProgress(++stylesheetsDone / (requiredStylesheets.length) * (1 / types) + typesLoaded / types)
+                await Promise.all(args[type].map(s => loader(s).then(p => {
+                    progressBar.setProgress(++totalResourcesLoaded / totalResources)
                 })))
             } catch(e) {
                 onError(type, e)
                 throw e
             }
             log(`Loaded all ${type}!`)
-            typesLoaded++
         }
         
         progressBar.track.ontransitionend = () => {
-            logoCanvas.style.opacity = "0%"
-            loadScreenBg.style.opacity = "0%"
-            progressBar.track.style.opacity = "0%"
+            let zero = "0%"
+            logo.style.opacity = zero
+            loadScreenBg.style.opacity = zero
+            progressBar.track.style.opacity = zero
+            screenEle.style.opacity = zero
             setTimeout(() => {
-                window.removeEventListener("resize", onResizeHandler)
-                logoCanvas.parentElement.removeChild(logoCanvas)
+                screenEle.removeChild(logo)
                 progressBar.remove()
-                loadScreenBg.parentElement.removeChild(loadScreenBg)
-                styleEle.parentElement.removeChild(styleEle)
+                screenEle.removeChild(loadScreenBg)
+                screenEle.removeChild(styleEle)
+                screenEle.parentElement.removeChild(screenEle)
                 onload()
             }, 1000)
             progressBar.track.ontransitionend = () => {}
